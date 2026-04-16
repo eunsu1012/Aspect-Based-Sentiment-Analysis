@@ -149,6 +149,12 @@ Park, Eunsoo
 
 ---
 
+## 🎓 Academic Context
+
+This project was developed as part of my Master’s thesis in Data Science.
+
+---
+
 ## ✔️ Summary
 
 > A fine-grained NLP system that extracts aspects and predicts sentiment for each aspect in text data
