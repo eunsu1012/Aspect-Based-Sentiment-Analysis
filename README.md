@@ -18,7 +18,6 @@ Aspect-Based Sentiment Analysis (ABSA) solves this limitation by extracting aspe
 
 ABSA is a fine-grained NLP task that identifies **aspect terms, opinion terms, and sentiment polarity** within text data. :contentReference[oaicite:0]{index=0}  
 
----
 
 ## 🎯 Objectives
 
@@ -27,7 +26,6 @@ ABSA is a fine-grained NLP task that identifies **aspect terms, opinion terms, a
 - Build an interpretable NLP pipeline for real-world applications  
 - Apply machine learning / deep learning techniques for ABSA  
 
----
 
 ## 🧠 Key Features
 
@@ -36,7 +34,6 @@ ABSA is a fine-grained NLP task that identifies **aspect terms, opinion terms, a
 - Fine-grained opinion mining  
 - Applicable to real-world domains such as e-commerce and reviews  
 
----
 
 ## 🗂️ Dataset
 
@@ -48,7 +45,6 @@ The project uses textual datasets such as:
 
 These datasets typically contain multiple aspects within a single sentence, making them suitable for ABSA tasks.
 
----
 
 ## ⚙️ Methodology
 
@@ -73,7 +69,6 @@ The project follows a standard ABSA pipeline:
 
 ABSA typically consists of multiple subtasks such as aspect extraction and sentiment classification. :contentReference[oaicite:1]{index=1}  
 
----
 
 ## 📊 Model Evaluation
 
@@ -85,7 +80,6 @@ The model is evaluated using:
 
 These are standard metrics for NLP classification tasks.
 
----
 
 ## 🛠️ Tech Stack
 
@@ -95,7 +89,6 @@ These are standard metrics for NLP classification tasks.
 - NLP libraries (e.g., NLTK, spaCy, or Transformers)  
 - Jupyter Notebook  
 
----
 
 ## 📁 Project Structure
 
@@ -110,7 +103,6 @@ Aspect-Based-Sentiment-Analysis/
 └── README.md
 ```
 
----
 
 ## 🚀 Results
 
@@ -120,7 +112,6 @@ Aspect-Based-Sentiment-Analysis/
 
 ABSA provides more detailed insights by analyzing sentiment at the aspect level rather than assigning a single label to the entire text. :contentReference[oaicite:2]{index=2}  
 
----
 
 ## 📌 Limitations
 
@@ -130,7 +121,6 @@ ABSA provides more detailed insights by analyzing sentiment at the aspect level 
 
 ABSA is known to be domain-dependent and sensitive to linguistic nuances. :contentReference[oaicite:3]{index=3}  
 
----
 
 ## 🔧 Future Work
 
@@ -139,19 +129,16 @@ ABSA is known to be domain-dependent and sensitive to linguistic nuances. :conte
 - Extend to multilingual sentiment analysis  
 - Build real-time sentiment analysis system  
 
----
 
 ## 👤 Author
 
 Park, Eunsoo
 
----
 
 ## 🎓 Academic Context
 
 This project was developed as part of my Master’s thesis in Data Science.
 
----
 
 ## ✔️ Summary
 
