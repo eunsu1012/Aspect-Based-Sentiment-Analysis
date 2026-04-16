@@ -3,8 +3,6 @@
 A natural language processing (NLP) project for fine-grained sentiment analysis.  
 This system identifies specific aspects within text and determines sentiment polarity for each aspect.
 
----
-
 ## 📌 Overview
 
 Traditional sentiment analysis assigns a single sentiment (positive, negative, neutral) to an entire text.  
