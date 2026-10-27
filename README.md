@@ -1,133 +1,143 @@
-# 💬 Aspect-Based Sentiment Analysis (ABSA)
+# 💬 Aspect-Based Sentiment Analysis (ABSA) on Healthcare Drug Reviews
 
-A natural language processing (NLP) project for fine-grained sentiment analysis.  
-This system identifies specific aspects within text and determines sentiment polarity for each aspect.
+An NLP project for fine-grained sentiment analysis of patient drug reviews, developed as my Master's thesis in Data Science.  
+This project classifies sentiment **separately for three aspects** of each review and compares 5 models across machine learning, deep learning, and transformer paradigms.
 
 ## 📌 Overview
 
 Traditional sentiment analysis assigns a single sentiment (positive, negative, neutral) to an entire text.  
-However, real-world text often contains multiple opinions about different aspects.
+However, patient reviews often contain different opinions about different aspects of the same drug.
 
 For example:  
-"The product quality is great, but the delivery is slow."  
+"Zoloft helped me feel calmer and more in control, but I had headaches for the first week."
 
-- Quality → Positive  
-- Delivery → Negative  
+- Benefits → Positive  
+- Side Effects → Negative  
 
-Aspect-Based Sentiment Analysis (ABSA) solves this limitation by extracting aspects and analyzing sentiment for each one individually.
-
-ABSA is a fine-grained NLP task that identifies **aspect terms, opinion terms, and sentiment polarity** within text data. :contentReference[oaicite:0]{index=0}  
+This project classifies sentiment for each aspect (Comments, Benefits, Side Effects) individually, instead of assigning one label to the whole review.
 
 
 ## 🎯 Objectives
 
-- Perform fine-grained sentiment analysis at the aspect level  
-- Extract meaningful insights from unstructured text data  
-- Build an interpretable NLP pipeline for real-world applications  
-- Apply machine learning / deep learning techniques for ABSA  
+- Perform aspect-level sentiment classification on healthcare drug reviews  
+- Compare traditional ML, deep learning, and transformer models under a consistent evaluation setup  
+- Handle class imbalance and evaluate models fairly with Macro-F1  
+- Identify which model types work best for each aspect, and why  
 
 
 ## 🧠 Key Features
 
-- Aspect extraction from text (e.g., "price", "quality", "service")  
-- Sentiment classification for each aspect  
-- Fine-grained opinion mining  
-- Applicable to real-world domains such as e-commerce and reviews  
+- Aspect-level sentiment classification for 3 aspects: Comments, Benefits, Side Effects  
+- 5 models × 3 aspects = **15 experiments**  
+- DistilBERT sentence-pair input (`[CLS] review [SEP] aspect [SEP]`) to condition predictions on each aspect  
+- Stratified nested cross-validation with **1,800 model fits** for classical models  
 
 
 ## 🗂️ Dataset
 
-The project uses textual datasets such as:
+**UCI Drug Review Dataset (Druglib.com)**, loaded via `ucimlrepo` (`id=461`)
 
-- Product reviews  
-- Customer feedback  
-- Online reviews (e.g., e-commerce platforms)
+- ~4,100 patient reviews → **12,000+ aspect-level samples**  
+- Each review has separate text fields for each aspect, with labels mapped as follows:
 
-These datasets typically contain multiple aspects within a single sentence, making them suitable for ABSA tasks.
+| Aspect | Text column | Label source | Negative | Neutral | Positive |
+|---|---|---|---|---|---|
+| Comments | `commentsReview` | `rating` (1–10) | 1–3 | 4–7 | 8–10 |
+| Benefits | `benefitsReview` | `effectiveness` | Ineffective | Moderately / Marginally Effective | Highly / Considerably Effective |
+| Side Effects | `sideEffectsReview` | `sideEffects` | Moderate / Severe / Extremely Severe | Mild | No Side Effects |
 
 
 ## ⚙️ Methodology
 
-The project follows a standard ABSA pipeline:
-
 1. Text preprocessing  
-   - Tokenization  
-   - Stopword removal  
-   - Lemmatization  
+   - Unicode normalization and lowercasing  
+   - Replacing URLs, user handles, and numbers with `<url>`, `<user>`, `<num>`  
+   - Keeping `!`, `?`, `'` for negation and sentiment cues  
 
-2. Aspect Extraction  
-   - Identifying aspect terms from text  
-   - (e.g., nouns or noun phrases representing features)
+2. Feature Representation  
+   - Classical ML: TF-IDF (word 1–3-grams, max 30K features)  
+   - Deep learning: trainable word embeddings  
+   - Transformer: sentence-pair tokenization (review + aspect name)  
 
 3. Sentiment Classification  
-   - Assigning polarity (positive, negative, neutral)  
-   - Using ML or deep learning models  
+   - **Classical ML**: Linear SVM, RBF-SVC, XGBoost (scikit-learn)  
+   - **Deep learning**: CNN-BiLSTM (TensorFlow/Keras)  
+   - **Transformer**: DistilBERT (`distilbert-base-uncased`, Hugging Face)  
+   - Class imbalance handled with `class_weight="balanced"`  
 
-4. Evaluation  
-   - Precision / Recall  
-   - F1-score  
-
-ABSA typically consists of multiple subtasks such as aspect extraction and sentiment classification. :contentReference[oaicite:1]{index=1}  
+4. Validation  
+   - Classical ML: stratified nested CV (5 outer × 3 inner folds), `GridSearchCV` over 39 hyperparameter configurations  
+   - CNN-BiLSTM: stratified 5-fold CV  
+   - DistilBERT: single stratified 80/20 split (due to compute limits)  
 
 
 ## 📊 Model Evaluation
 
-The model is evaluated using:
+The models are evaluated using:
 
-- **Precision**: Accuracy of predicted aspects/sentiments  
-- **Recall**: Coverage of actual aspects  
-- **F1-score**: Balance between precision and recall  
-
-These are standard metrics for NLP classification tasks.
+- **Macro-F1** (primary metric): averages F1 across classes equally, so minority classes count as much as the majority class  
+- **Accuracy**  
+- **Precision / Recall** per class  
+- **Confusion matrices** to analyze class-wise errors  
 
 
 ## 🛠️ Tech Stack
 
 - Python  
 - Pandas / NumPy  
-- Scikit-learn  
-- NLP libraries (e.g., NLTK, spaCy, or Transformers)  
+- Scikit-learn / XGBoost  
+- TensorFlow / Keras  
+- Hugging Face Transformers  
 - Jupyter Notebook  
 
 
 ## 📁 Project Structure
+
+<!-- 실제 저장소 폴더 구조에 맞게 수정하세요 -->
 
 ```
 Aspect-Based-Sentiment-Analysis/
 │
 ├── data/                # Dataset
 ├── notebooks/           # EDA & modeling
-├── src/                 # NLP pipeline
-├── models/              # Trained models
-├── results/             # Outputs & visualizations
+├── src/                 # Preprocessing & nested CV pipeline
+├── results/             # Metrics, confusion matrices, figures
 └── README.md
 ```
 
 
 ## 🚀 Results
 
-- Successfully extracted aspects from text data  
-- Classified sentiment at a fine-grained level  
-- Demonstrated improved insight compared to traditional sentiment analysis  
+**Macro-F1 / Accuracy by aspect**
 
-ABSA provides more detailed insights by analyzing sentiment at the aspect level rather than assigning a single label to the entire text. :contentReference[oaicite:2]{index=2}  
+| Model | Comments | Benefits | Side Effects | Mean Macro-F1 |
+|---|---|---|---|---|
+| Linear SVM | 0.500 / 0.568 | **0.625** / 0.751 | 0.715 / 0.715 | 0.613 |
+| RBF-SVC | 0.500 / 0.574 | 0.624 / 0.753 | 0.744 / 0.741 | **0.623** |
+| XGBoost | 0.431 / 0.572 | 0.563 / 0.754 | 0.728 / 0.726 | 0.574 |
+| CNN-BiLSTM | 0.420 / 0.512 | 0.538 / 0.707 | 0.701 / 0.701 | 0.553 |
+| DistilBERT | **0.503** / 0.574 | 0.615 / 0.760 | **0.752** / 0.747 | **0.623** |
+
+- **DistilBERT** achieved the best Side Effects Macro-F1 (**75.2%**, +5.1 pts over CNN-BiLSTM)  
+- **RBF-SVC** matched DistilBERT's mean Macro-F1 (**62.3%**), and **Linear SVM** led on Benefits, showing that tuned TF-IDF baselines remain competitive with a 66M-parameter transformer on small domain datasets  
+- **Neutral** sentiment was the hardest class for every model  
+
+> Note: DistilBERT was evaluated on a single split, while the other models report means over 5 folds, so the comparison is not strictly equal.
 
 
 ## 📌 Limitations
 
-- Difficulty in detecting implicit aspects  
-- Performance depends on domain-specific data  
-- Challenges with sarcasm and contextual ambiguity  
-
-ABSA is known to be domain-dependent and sensitive to linguistic nuances. :contentReference[oaicite:3]{index=3}  
+- Comments labels come from overall ratings, which don't always match the comment text (label noise)  
+- Mixed or contrastive phrasing ("worked, but…") causes most neutral-class errors  
+- Results are based on a single, relatively small dataset; cross-domain performance was not tested  
 
 
 ## 🔧 Future Work
 
-- Apply transformer-based models (BERT, RoBERTa)  
-- Improve aspect extraction using deep learning  
-- Extend to multilingual sentiment analysis  
-- Build real-time sentiment analysis system  
+- Cross-validate DistilBERT for a fully comparable evaluation  
+- Test larger and domain-specific transformers (e.g., clinical BERT variants)  
+- Extend to cross-domain and multilingual ABSA  
+- Build a real-time ABSA system for review platforms  
 
 
 ## 👤 Author
@@ -137,9 +147,11 @@ Park, Eunsoo
 
 ## 🎓 Academic Context
 
-This project was developed as part of my Master’s thesis in Data Science.
+This project was developed as my Master's thesis in Data Science at Minnesota State University, Mankato (2025), advised by Dr. Rushit Dave.
+
+**Thesis:** *Evaluating Aspect-Based Sentiment Analysis in Healthcare Drug Reviews Across Machine Learning, Deep Neural Networks, and Transformer Models*
 
 
 ## ✔️ Summary
 
-> A fine-grained NLP system that extracts aspects and predicts sentiment for each aspect in text data
+> An aspect-level sentiment classification study on healthcare drug reviews, showing that a transformer (DistilBERT) leads on Side Effects while tuned classical models (SVC) match its overall performance on a small domain dataset
